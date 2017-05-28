@@ -1,4 +1,4 @@
-`timescale 1ps/1ps
+`timescale 1ns/100ps
 
 module audio_stereo_out_tb();
 	localparam PCM_CLOCK_PERIOD_NS = 20;
@@ -22,7 +22,7 @@ module audio_stereo_out_tb();
 			.aclr(aclr),
 			.clk_audio(clk_audio),
 			.left(left_out),
-			.right(left_out),
+			.right(right_out),
 			.clk_pcm(clk_pcm),
 			.stereo_pcm_rdy(stereo_pcm_rdy),
 			.stereo_pcm({left, right}),
