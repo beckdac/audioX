@@ -1,7 +1,7 @@
 module pwm_audio_stereo_out_tb();
 	localparam CLOCK_PERIOD_NS = 20;
 
-	reg clk = 0, aclr = 1;
+	reg clk = 0, aclr = 0;
 	reg [7:0] left = 0, right = 0;
 	wire left_out, right_out;
 
@@ -20,9 +20,9 @@ module pwm_audio_stereo_out_tb();
 	initial
 		begin
 			#CLOCK_PERIOD_NS
-			aclr <= 0;
-			#CLOCK_PERIOD_NS
 			aclr <= 1;
+			#CLOCK_PERIOD_NS
+			aclr <= 0;
 			#CLOCK_PERIOD_NS
 			left = 8'd127;
 			#(CLOCK_PERIOD_NS * 255)

@@ -3,7 +3,7 @@
 module audioX_tb();
 	localparam CLOCK_PERIOD_NS = 20;
 
-	reg clk = 0, aclr = 1;
+	reg clk = 0, aclr = 0;
 	wire pll_locked, fifo_full, right, left;
 
 
@@ -22,9 +22,9 @@ module audioX_tb();
 	initial
 		begin
 			#CLOCK_PERIOD_NS
-			aclr <= 0;
-			#CLOCK_PERIOD_NS
 			aclr <= 1;
+			#CLOCK_PERIOD_NS
+			aclr <= 0;
 			#CLOCK_PERIOD_NS
 			#(CLOCK_PERIOD_NS * 255 * 100)
 			$finish;

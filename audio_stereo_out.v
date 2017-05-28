@@ -40,9 +40,9 @@ module audio_stereo_out
 			.wrfull(fifo_full)
 		);
 
-	always @(posedge clk_audio or negedge(aclr))
+	always @(posedge clk_audio or posedge(aclr))
 		begin
-			if (~aclr)
+			if (aclr)
 				begin
 					$display("%m\nreceived reset");
 					$display($time);

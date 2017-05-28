@@ -10,9 +10,9 @@ module pwm_audio_stereo_out
 	reg [7:0] count = 0;
 
 	
-	always @(posedge clk or negedge aclr)
+	always @(posedge clk or posedge aclr)
 		begin
-			if (~aclr)
+			if (aclr)
 				begin
 					$display("%m\nreceived reset");
 					$display($time, "is current time");

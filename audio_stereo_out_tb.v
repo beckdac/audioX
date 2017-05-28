@@ -4,7 +4,7 @@ module audio_stereo_out_tb();
 	localparam PCM_CLOCK_PERIOD_NS = 20;
 	localparam AUDIO_CLOCK_PERIOD_NS = 8.89245;
 
-	reg aclr = 1;
+	reg aclr = 0;
 	reg clk_pcm = 0;
    	reg	clk_audio = 0;
 	reg [7:0] left = 0;
@@ -32,9 +32,9 @@ module audio_stereo_out_tb();
 	initial
 		begin
 			#PCM_CLOCK_PERIOD_NS
-			aclr <= 0;
-			#PCM_CLOCK_PERIOD_NS
 			aclr <= 1;
+			#PCM_CLOCK_PERIOD_NS
+			aclr <= 0;
 			#PCM_CLOCK_PERIOD_NS
 			left = 8'd127;
 			right = 8'd0;

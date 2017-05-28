@@ -8,9 +8,9 @@ module tone_generator
 	);
 
 
-	always @(posedge clk or negedge aclr)
+	always @(posedge clk or posedge aclr)
 		begin
-			if (~aclr)
+			if (aclr)
 				begin
 					tone_pcm_rdy <= 0;
 					tone_pcm <= 0;
