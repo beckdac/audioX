@@ -1,3 +1,5 @@
+`timescale 1ps/1ps
+
 module audio_stereo_out_tb();
 	localparam PCM_CLOCK_PERIOD_NS = 20;
 	localparam AUDIO_CLOCK_PERIOD_NS = 8.89245;
@@ -24,34 +26,34 @@ module audio_stereo_out_tb();
 
 	initial
 		begin
-			#CLOCK_PERIOD_NS
+			#PCM_CLOCK_PERIOD_NS
 			aclr <= 0;
-			#CLOCK_PERIOD_NS
+			#PCM_CLOCK_PERIOD_NS
 			aclr <= 1;
-			#CLOCK_PERIOD_NS
+			#PCM_CLOCK_PERIOD_NS
 			left = 8'd127;
 			stereo_pcm_rdy <= 1;
-			#CLOCK_PERIOD_NS
+			#PCM_CLOCK_PERIOD_NS
 			stereo_pcm_rdy <= 0;
-			#(CLOCK_PERIOD_NS * 255 * 10)
+			#(PCM_CLOCK_PERIOD_NS * 255 * 10)
 			left = 8'd0;
 			right = 8'd127;
 			stereo_pcm_rdy <= 1;
-			#CLOCK_PERIOD_NS
+			#PCM_CLOCK_PERIOD_NS
 			stereo_pcm_rdy <= 0;
-			#(CLOCK_PERIOD_NS * 255 * 10)
+			#(PCM_CLOCK_PERIOD_NS * 255 * 10)
 			left = 8'd127;
 			right = 8'd127;
 			stereo_pcm_rdy <= 1;
-			#CLOCK_PERIOD_NS
+			#PCM_CLOCK_PERIOD_NS
 			stereo_pcm_rdy <= 0;
-			#(CLOCK_PERIOD_NS * 255 * 10)
+			#(PCM_CLOCK_PERIOD_NS * 255 * 10)
 			left = 8'd0;
 			right = 8'd0;
 			stereo_pcm_rdy <= 1;
-			#CLOCK_PERIOD_NS
+			#PCM_CLOCK_PERIOD_NS
 			stereo_pcm_rdy <= 0;
-			#(CLOCK_PERIOD_NS * 255 * 10)
+			#(PCM_CLOCK_PERIOD_NS * 255 * 10)
 			$finish;
 		end
 	
