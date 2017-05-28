@@ -1,8 +1,10 @@
+`timescale 1ps/1ps
+
 module audioX_tb();
 	localparam CLOCK_PERIOD_NS = 20;
 
 	reg clk = 0, aclr = 1;
-	wire pll_locked, fifo_full. right, left;
+	wire pll_locked, fifo_full, right, left;
 
 
 	always #(CLOCK_PERIOD_NS/2) clk <= !clk;
