@@ -1,0 +1,1 @@
+vsim +altera -L altera_ver -L altera -L 220model_ver -L 220model -L altera_lnsim_ver -L altera_lnsim -L cycloneive -L altera_mf_ver -L altera_mf -do audioX_run_msim_rtl_verilog.do -gui -l msim_transcript work.altpll_audio_out work.altpll_audio_out_altpll work.audio_stereo_out work.fifo_audio work.pwm_audio_stereo_out work.tone_generator
