@@ -1,10 +1,8 @@
 module audio_stereo_out_tb();
 	localparam PCM_CLOCK_PERIOD_NS = 20;
-	localparam AUDIO_
+	localparam AUDIO_CLOCK_PERIOD_NS = 8.89245;
 
-	reg aclr = 1, clk_pcm = 0. clk_audio = 0;
-
-	reg clk = 0, aclr = 1;
+	reg aclr = 1, clk_pcm = 0, clk_audio = 0;
 	reg [7:0] left = 0, right = 0;
 	wire left_out, right_out, fifo_full;
 	reg stereo_pcm_rdy = 0;
@@ -17,7 +15,7 @@ module audio_stereo_out_tb();
 			.aclr(aclr),
 			.clk_audio(clk_audio),
 			.left(left_out),
-			.right(left_out)
+			.right(left_out),
 			.clk_pcm(clk_pcm),
 			.stereo_pcm_rdy(stereo_pcm_rdy),
 			.stereo_pcm({left, right}),
