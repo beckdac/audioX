@@ -14,7 +14,7 @@ module pwm_audio_stereo_out_tb();
 			.left_top(left),
 			.right_top(right),
 			.left(left_out),
-			.right(left_out)
+			.right(right_out)
 		);
 
 	initial
