@@ -11,8 +11,8 @@ module dsm_stereo
 		output right_out
 	);
 
-	reg [DSM_WIDTH:0] left_accum;
-	reg [DSM_WIDTH:0] right_accum;
+	reg [DSM_WIDTH:0] left_accum = 0;
+	reg [DSM_WIDTH:0] right_accum = 0;
 
 	always @(posedge clk or posedge aclr)
 		begin
