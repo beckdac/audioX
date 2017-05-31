@@ -13,11 +13,11 @@ module audio_44_1kHz
 
 	wire clk_audio;
 
-	reg [AUDIO_BITS-1:0] left_pcm;
-	reg [AUDIO_BITS-1:0] right_pcm;
+	reg [AUDIO_BITS-1:0] left_pcm = 0;
+	reg [AUDIO_BITS-1:0] right_pcm = 0;
 
-	reg [25:0] count;
-	reg aclr;
+	reg [25:0] count = 0;
+	reg aclr = 0;
 
 	always aclr = !aclr_;
 
