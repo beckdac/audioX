@@ -8,31 +8,33 @@ module audio_44_1kHz
 	(
 		input clk,							// system clock
 		input aclr_,						// inverted asynchronous clear (active high to low)
-		input wreq;							// write request for next sample, active high
-		input [(2*AUDIO_BITS)-1:0] sample;	// when wreq, this sample is read into internal buffer
+		input wreq,							// write request for next sample, active high
+		input [(2*AUDIO_BITS)-1:0] sample,	// when wreq, this sample is read into internal buffer
 		output wire left_out,				// left 1 bit dac
 		output wire right_out,				// right 1 bit dac
 		output wire pll_locked,				// is the audio pll locked
-		output reg status					// 1s blinkenlicht for status
+		output reg ready = 0,				// 1 when ready for next sample
+		output wire clk_audio				// 44.1 kHz clock * max unsigned integer(AUDIO_BITS)
 	);
 
-	wire clk_audio;
-
-	reg [AUDIO_BITS-1:0] left_pcm = 0;
+	reg [(2*AUDIO_BITS)-1:0] sample_buf = 0;// internal buffer for audio sample, updated at +e wreq
+	reg [AUDIO_BITS-1:0] left_pcm = 0;		// values sent to dsm
 	reg [AUDIO_BITS-1:0] right_pcm = 0;
+	reg sample_ready = 0;					// has a new value been read into sample_buf
+	reg [AUDIO_BITS-1:0] sample_clock = 0;	// when this overflows, one full audio cycle has passed
 
-	reg [25:0] count = 0;
-	reg aclr = 0;
-
+	reg aclr = 0;							// active high reset (inverted from alcr_)
 	always aclr = !aclr_;
 
+	// audio pll that runs at 44.1 kHz * 12 bit dsm depth
 	pll_12bit_44_1kHz AUDIO_PLL (
 			.areset(aclr),
 			.inclk0(clk),
 			.c0(clk_audio),
 			.locked(pll_locked)
 		);
-	
+
+	// stereo dsm generator using pll	
 	dsm_stereo #(AUDIO_BITS) AUDIO_DSM (
 			.clk(clk_audio),
 			.aclr(aclr),
@@ -42,31 +44,68 @@ module audio_44_1kHz
 			.right_out(right_out)
 		);
 
-	always @(posedge clk or posedge aclr)
+	// handle write request
+	always @(posedge clk_audio or posedge aclr)
+		begin
+			if (aclr)
+				sample_buf <= 0;
+			else
+				if (wreq)
+					sample_buf <= sample;
+				else
+					sample_buf <= sample_buf;
+		end
+
+	always @(posedge clk_audio or posedge aclr)
+		begin
+			if (aclr)
+				ready <= 1;
+			else
+				if (wreq)
+					ready <= 0;
+				else if (sample_clock == 0)
+					ready <= 1;
+				else
+					ready <= ready;
+		end
+
+	// handle transfer of sample_buf to left and right channels
+	always @(posedge clk_audio or posedge aclr)
 		begin
 			if (aclr)
 				begin
-					count <= 0;
 					left_pcm <= 0;
 					right_pcm <= 0;
 				end
 			else
 				begin
-					if (count == 50000000)
+					if (sample_clock == 0 && !ready)
 						begin
-							count <= 0;
-							left_pcm <= left_pcm + 12'd127;
-							right_pcm <= right_pcm + 12'd127;
-							status <= !status;
+							left_pcm <= sample_buf[(AUDIO_BITS * 2)-1:AUDIO_BITS];
+							right_pcm <= sample_buf[AUDIO_BITS-1:0];
+						end
+					else if (sample_clock == 0 && ready)
+						begin
+							// no sample is available, but the clock is done,
+							// zero the sample
+							left_pcm <= 0;
+							right_pcm <= 0;
 						end
 					else
 						begin
-							count <= count + 1'b1;
 							left_pcm <= left_pcm;
 							right_pcm <= right_pcm;
-							status <= status;
 						end
 				end
+		end
+
+	// handle cycle of audio sample clock
+	always @(posedge clk_audio or posedge aclr)
+		begin
+			if (aclr)
+				sample_clock <= 0;
+			else
+				sample_clock <= sample_clock + 1;
 		end
 
 endmodule
