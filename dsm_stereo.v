@@ -1,7 +1,7 @@
 // delta sigma modulator for stereo applications
 
 module dsm_stereo
-	#(parameter DSM_WIDTH)
+	#(parameter DSM_WIDTH = 12)
 	(
 		input clk,
 		input aclr,
@@ -16,7 +16,7 @@ module dsm_stereo
 
 	always @(posedge clk or posedge aclr)
 		begin
-			if (!aclr)
+			if (aclr)
 				begin
 					left_accum <= 0;
 					right_accum <= 0;

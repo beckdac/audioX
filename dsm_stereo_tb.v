@@ -25,16 +25,16 @@ module dsm_stereo_tb ();
 			#CLOCK_PERIOD_NS
 			aclr <= 0;
 			#CLOCK_PERIOD_NS
-			left = 8'd127;
+			left = 12'd127;
 			#(CLOCK_PERIOD_NS * 4096)
-			left = 8'd0;
-			right = 8'd1024;
+			left = 12'd0;
+			right = 12'd1024;
 			#(CLOCK_PERIOD_NS * 4096)
-			left = 8'd2048;
-			right = 8'd3750;
+			left = 12'd2048;
+			right = 12'd3750;
 			#(CLOCK_PERIOD_NS * 4096)
-			left = 8'd0;
-			right = 8'd0;
+			left = 12'd0;
+			right = 12'd0;
 			#(CLOCK_PERIOD_NS * 4096)
 			$finish;
 		end
