@@ -1,14 +1,19 @@
 // 44.1 kHz audio out with dsm and pll clock
+//
+// (c) 2017, David Beck, beck.dac@live.com
+// MIT License
 
 module audio_44_1kHz
 	#(parameter AUDIO_BITS = 12)
 	(
-		input clk,
-		input aclr_,
-		output wire left_out,
-		output wire right_out,
-		output wire pll_locked,
-		output reg status
+		input clk,							// system clock
+		input aclr_,						// inverted asynchronous clear (active high to low)
+		input wreq;							// write request for next sample, active high
+		input [(2*AUDIO_BITS)-1:0] sample;	// when wreq, this sample is read into internal buffer
+		output wire left_out,				// left 1 bit dac
+		output wire right_out,				// right 1 bit dac
+		output wire pll_locked,				// is the audio pll locked
+		output reg status					// 1s blinkenlicht for status
 	);
 
 	wire clk_audio;
