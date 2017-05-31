@@ -20,7 +20,6 @@ module audio_44_1kHz
 	reg [(2*AUDIO_BITS)-1:0] sample_buf = 0;// internal buffer for audio sample, updated at +e wreq
 	reg [AUDIO_BITS-1:0] left_pcm = 0;		// values sent to dsm
 	reg [AUDIO_BITS-1:0] right_pcm = 0;
-	reg sample_ready = 0;					// has a new value been read into sample_buf
 	reg [AUDIO_BITS-1:0] sample_clock = 0;	// when this overflows, one full audio cycle has passed
 
 	reg aclr = 0;							// active high reset (inverted from alcr_)
@@ -56,6 +55,7 @@ module audio_44_1kHz
 					sample_buf <= sample_buf;
 		end
 
+	// handle signal that buffer is available
 	always @(posedge clk_audio or posedge aclr)
 		begin
 			if (aclr)
