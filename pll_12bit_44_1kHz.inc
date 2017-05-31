@@ -14,12 +14,13 @@
 --agreement for further details.
 
 
-component altpll_audio_out
-	PORT
-	(
-		areset		: IN STD_LOGIC  := '0';
-		inclk0		: IN STD_LOGIC  := '0';
-		c0		: OUT STD_LOGIC ;
-		locked		: OUT STD_LOGIC 
-	);
-end component;
+FUNCTION pll_12bit_44_1kHz 
+(
+	areset,
+	inclk0
+)
+
+RETURNS (
+	c0,
+	locked
+);
