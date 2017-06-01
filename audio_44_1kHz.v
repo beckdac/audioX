@@ -47,7 +47,7 @@ module audio_44_1kHz
 	// handle write request
 	always @(posedge clk_audio or posedge aclr)
 		begin
-			if (aclr)
+			if (aclr || !pll_locked)
 				sample_buf <= 0;
 			else
 				if (wreq)
@@ -59,7 +59,7 @@ module audio_44_1kHz
 	// handle signal that buffer is available
 	always @(posedge clk_audio or posedge aclr)
 		begin
-			if (aclr)
+			if (aclr || !pll_locked)
 				ready <= 1;
 			else
 				if (wreq)
@@ -73,7 +73,7 @@ module audio_44_1kHz
 	// handle transfer of sample_buf to left and right channels
 	always @(posedge clk_audio or posedge aclr)
 		begin
-			if (aclr)
+			if (aclr || !pll_locked)
 				begin
 					left_pcm <= 0;
 					right_pcm <= 0;
@@ -103,7 +103,7 @@ module audio_44_1kHz
 	// handle cycle of audio sample clock
 	always @(posedge clk_audio or posedge aclr)
 		begin
-			if (aclr)
+			if (aclr || !pll_locked)
 				sample_clock <= 0;
 			else
 				sample_clock <= sample_clock + 1;

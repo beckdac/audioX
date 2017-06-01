@@ -20,6 +20,7 @@ module audio_44_1kHz_tb #(parameter AUDIO_BITS = 12) ();
 	reg [(AUDIO_BITS*2)-1:0] sample = 0;
 	wire status, ready, pll_locked;
 	wire left_out, right_out;
+	wire clk_audio;
 
 	audio_44_1kHz #(AUDIO_BITS) MUT
 		(
@@ -30,7 +31,8 @@ module audio_44_1kHz_tb #(parameter AUDIO_BITS = 12) ();
 			.left_out(left_out),
 			.right_out(right_out),
 			.pll_locked(pll_locked),
-			.ready(ready)
+			.ready(ready),
+			.clk_audio(clk_audio)
 		);
 
 	initial
@@ -42,9 +44,12 @@ module audio_44_1kHz_tb #(parameter AUDIO_BITS = 12) ();
 			#CLOCK_PERIOD_NS
 			sample[(AUDIO_BITS*2)-1:AUDIO_BITS] <= 1024;
 			sample[AUDIO_BITS-1:0] <= 4000;
+			#150 // this is how long it takes the pll to sync
+			#CLOCK_PERIOD_NS
 			wreq <= 1;
 			#CLOCK_PERIOD_NS
 			// ready should fall
+			wreq <= 0;
 			#(CLOCK_PERIOD_NS * 2 * 1150) // 23000 ns is just > 1 sample at 44.1 kHz
 			// ready should come back up
 			$finish;
