@@ -19,12 +19,13 @@ module tone_generator
 	reg wreq = 0;
 	reg [(AUDIO_BITS*2)-1:0] sample = 0;
 	reg [31:0] count = 0;
+	reg [AUDIO_BITS-1:0] sout = 12'd4095;
 
 	audio_44_1kHz #(AUDIO_BITS) MUT
 		(
 			.clk(clk),
-			.clk_audio(clk_audio),
 			.aclr_(aclr_),
+			.clk_audio(clk_audio),
 			.wreq(wreq),
 			.sample(sample),
 			.left_out(left_out),
@@ -45,14 +46,27 @@ module tone_generator
 					if (ready)
 						begin
 							wreq <= 1;
-							sample[(AUDIO_BITS*2)-1:AUDIO_BITS] <= 4095;
-							sample[AUDIO_BITS-1:0] <= 4095;
+							sample[(AUDIO_BITS*2)-1:AUDIO_BITS] <= sout;
+							sample[AUDIO_BITS-1:0] <= sout;
 						end
 					else
 						begin
 							wreq <= 0;
 							sample <= 0;
 						end
+				end
+		end
+
+	always @(posedge clk_audio or negedge aclr_)
+		begin
+			if (!aclr_)
+				sout <= 4095;
+			else
+				begin
+					if (count % 180633 == 0)
+						sout <= sout - 12'd1;
+					else
+						sout <= sout;
 				end
 		end
 	

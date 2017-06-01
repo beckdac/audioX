@@ -20,7 +20,6 @@ module audio_44_1kHz_tb #(parameter AUDIO_BITS = 12) ();
 	reg [(AUDIO_BITS*2)-1:0] sample = 0;
 	wire status, ready, pll_locked;
 	wire left_out, right_out;
-	wire clk_audio;
 
 	audio_44_1kHz #(AUDIO_BITS) MUT
 		(
@@ -31,8 +30,7 @@ module audio_44_1kHz_tb #(parameter AUDIO_BITS = 12) ();
 			.left_out(left_out),
 			.right_out(right_out),
 			.pll_locked(pll_locked),
-			.ready(ready),
-			.clk_audio(clk_audio)
+			.ready(ready)
 		);
 
 	initial

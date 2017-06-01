@@ -17,6 +17,8 @@ module audio_44_1kHz
 		output wire clk_audio				// 44.1 kHz clock * max unsigned integer(AUDIO_BITS)
 	);
 
+	//wire clk_audio;							// 44.1 kHz clock * max unsigned integer(AUDIO_BITS)
+
 	reg [(2*AUDIO_BITS)-1:0] sample_buf = 0;// internal buffer for audio sample, updated at +e wreq
 	reg [AUDIO_BITS-1:0] left_pcm = 0;		// values sent to dsm
 	reg [AUDIO_BITS-1:0] right_pcm = 0;
@@ -45,7 +47,7 @@ module audio_44_1kHz
 		);
 
 	// handle write request
-	always @(posedge clk_audio or posedge aclr)
+	always @(posedge clk_audio or posedge aclr or negedge pll_locked)
 		begin
 			if (aclr || !pll_locked)
 				sample_buf <= 0;
@@ -57,7 +59,7 @@ module audio_44_1kHz
 		end
 
 	// handle signal that buffer is available
-	always @(posedge clk_audio or posedge aclr)
+	always @(posedge clk_audio or posedge aclr or negedge pll_locked)
 		begin
 			if (aclr || !pll_locked)
 				ready <= 1;
@@ -71,7 +73,7 @@ module audio_44_1kHz
 		end
 
 	// handle transfer of sample_buf to left and right channels
-	always @(posedge clk_audio or posedge aclr)
+	always @(posedge clk_audio or posedge aclr or negedge pll_locked)
 		begin
 			if (aclr || !pll_locked)
 				begin
@@ -101,7 +103,7 @@ module audio_44_1kHz
 		end
 
 	// handle cycle of audio sample clock
-	always @(posedge clk_audio or posedge aclr)
+	always @(posedge clk_audio or posedge aclr or negedge pll_locked)
 		begin
 			if (aclr || !pll_locked)
 				sample_clock <= 0;
