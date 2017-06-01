@@ -26,8 +26,8 @@ module audio_44_1kHz
 	assign aclr = !aclr_;
 
 	// audio pll that runs at 44.1 kHz * 12 bit dsm depth
-	//pll_12bit_44_1kHz AUDIO_PLL (
-	pll_12bit_44_1kHz_sim AUDIO_PLL (
+	pll_12bit_44_1kHz AUDIO_PLL (
+	//pll_12bit_44_1kHz_sim AUDIO_PLL (
 			.areset(aclr),
 			.inclk0(clk),
 			.c0(clk_audio),

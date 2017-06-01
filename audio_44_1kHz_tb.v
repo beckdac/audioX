@@ -15,7 +15,7 @@ module audio_44_1kHz_tb #(parameter AUDIO_BITS = 12) ();
 	reg clk = 0;
 	always #(CLOCK_PERIOD_NS/2) clk <= !clk;
 
-	reg aclr = 1;
+	reg aclr_ = 1;
 	reg wreq = 0;
 	reg [(AUDIO_BITS*2)-1:0] sample = 0;
 	wire status, ready, pll_locked;
@@ -36,16 +36,16 @@ module audio_44_1kHz_tb #(parameter AUDIO_BITS = 12) ();
 	initial
 		begin
 			#CLOCK_PERIOD_NS
-			aclr <= 0;
+			aclr_ <= 0;
 			#CLOCK_PERIOD_NS
-			aclr <= 1;
+			aclr_ <= 1;
 			#CLOCK_PERIOD_NS
 			sample[(AUDIO_BITS*2)-1:AUDIO_BITS] <= 1024;
 			sample[AUDIO_BITS-1:0] <= 4000;
 			wreq <= 1;
 			#CLOCK_PERIOD_NS
 			// ready should fall
-			#(CLOCK_PERIOD_NS * 1150) // 23000 ns is just > 1 sample at 44.1 kHz
+			#(CLOCK_PERIOD_NS * 2 * 1150) // 23000 ns is just > 1 sample at 44.1 kHz
 			// ready should come back up
 			$finish;
 		end
