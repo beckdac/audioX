@@ -30,7 +30,6 @@ module audio_44_1kHz_tb #(parameter AUDIO_BITS = 12) ();
 			.left_out(left_out),
 			.right_out(right_out),
 			.pll_locked(pll_locked),
-			.status(status),
 			.ready(ready)
 		);
 

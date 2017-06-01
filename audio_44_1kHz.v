@@ -22,11 +22,12 @@ module audio_44_1kHz
 	reg [AUDIO_BITS-1:0] right_pcm = 0;
 	reg [AUDIO_BITS-1:0] sample_clock = 0;	// when this overflows, one full audio cycle has passed
 
-	reg aclr = 0;							// active high reset (inverted from alcr_)
-	always aclr = !aclr_;
+	wire aclr;							// active high reset (inverted from alcr_)
+	assign aclr = !aclr_;
 
 	// audio pll that runs at 44.1 kHz * 12 bit dsm depth
-	pll_12bit_44_1kHz AUDIO_PLL (
+	//pll_12bit_44_1kHz AUDIO_PLL (
+	pll_12bit_44_1kHz_sim AUDIO_PLL (
 			.areset(aclr),
 			.inclk0(clk),
 			.c0(clk_audio),
